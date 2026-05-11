@@ -1,79 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
-// PARTIE 1
-// function App() {
-//   const DATE = new Date();
-//   return (
-//     <>
-//       <h1>Ma To-Do List Jeux Vidéo</h1>
-//       <h2>{DATE.toLocaleString()}</h2>
-//       <ToDo />
-//     </>
-//   )
-// }
+const TODOS = [
+  { nom: "Baldur's Gate 3", date: "01-05-2026", checked: true },
+  { nom: "Diablo IV", date: "03-05-2026", checked: true },
+  { nom: "Enshrouded", date: "10-05-2026", checked: false }
+]
 
+function ToDo({ todo }) {
+  function handleClick(nom) {
+    alert(nom)
+  }
 
-// function ToDo() {
-//   return (
-//     <ul>
-//       <li>Baldur's Gate 3</li>
-//       <li>Diablo IV</li>
-//       <li>Enshrouded</li>
-//     </ul>
-//   )
-// }
+  if (todo.checked) {
+    return <li onClick={() => handleClick(todo.nom)} className='green'><input type='checkbox' defaultChecked />{todo.nom} - {todo.date}</li>
+  }
+  return <li onClick={() => handleClick(todo.nom)} className='orange'>{todo.nom} - {todo.date}</li>
+}
 
-// PARTIE 2
-// function ToDo({todo, date}) {
-// return <li>{todo}- {date}</li>
-// }
+function Form({onSubmit}) {
+    function handleChange(event) {
+    console.log(event.target.value)
+  }
 
-// function App() {
-//   return (
-//     <>
-//       <h1>Ma To-Do List Jeux Vidéo</h1>
-//       <ul>
-//         <ToDo todo={"Baldur's Gate 3"} date={"01/05/2026"}/>
-//         <ToDo todo={"Diablo IV"} date={"03/05/2026"}/>
-//         <ToDo todo={"Enshrouded"} date={"10/05/2026"}/>
-//       </ul>
-//     </>
-//   );
-// }
-
-// PARTIE 3
-const TODOS = ["Baldur's Gate 3", "Diablo IV", "Enshrouded"]
-
-function ToDo({todo}){
-  return <li>{todo}</li>
+  return <form onSubmit={onSubmit} >
+    <input type="text" placeholder='La ToDo' onChange={event=>handleChange(event)} />
+    <input type="text" placeholder='La Date' onChange={event=>handleChange(event)} />
+    <input type="submit" />
+  </form>
 }
 
 function App() {
-  const LIST_TODO = []
+  const DATE = new Date()
 
-TODOS.forEach(todo => {
-  LIST_TODO.push(<ToDo key={TODOS.indexOf(todo)} todo={todo} />)
-})
+  function handleSubmit(event){
+    event.preventDefault();
+    const INPUTS = document.querySelectorAll('input[type="text"]');
+    const TAB = ["toto", "tata"]
+    INPUTS.forEach((input) => {console.log(input.value)});
+  
+  }
 
-return (
-  <ul>
-    {LIST_TODO}
-  </ul>
-);
+  return (
+    <>
+      <h1>My Todo List</h1>
+      <h2>{DATE.toLocaleString()}</h2>
+      <ul>
+        {TODOS.map((todo, index) => (
+          <ToDo todo={todo} key={index} />
+        ))}
+      </ul>
+      <Form onSubmit={event=> handleSubmit(event)} />
+    </>
+    
+  )
 }
-    export default App
 
-// Exercice 1 : ToDo List partie 3
-// 1) Au début du fichier App.jsx, créer une constante TODOS qui est un tableau contenant
-// plusieurs objets. Chaque objet possède une attribut todo et un attribut date (choisir les
-// valeurs des attributs pour chacun des objets)
+export default App
 
-// 2) Au sein du Composant App, retourner, grâce une boucle, l’affichage de chaque ToDo sous
-// forme de composant ToDo (ainsi, chaque ToDo ne sera plus affichée de manière individuelle).
-// Ne pas oublier d’inclure une key à chaque ToDo.
-
-// 3) Une fois fini, pusher sur le dépôt github et envoyer un MP pour m'avertir
+// 9) Dans le composant App(), créer une fonction handleSubmit() qui prendra un event en
+// paramètre. Cette fonction fait d’abord un preventDefault() sur event. Puis elle récupère tous
+// les inputs de type text avec un querySelectorAll, et les stockent dans une constante INPUTS.
+// Enfin, elle parcourt le tableau INPUTS avec une boucle pour afficher la value de chaque
+// élément
+// 10) Enfin, concernant le Composant Form() importé dans App(), passer à sa Props onSubmit une
+// fonction fléchée qui prend un event en paramètre, et appelle la fonction handleSubmit() en
+// lui passant l’event
